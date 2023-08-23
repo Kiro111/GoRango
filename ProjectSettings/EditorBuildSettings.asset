@@ -1,0 +1,11 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Super Casual Shooter Assets/Scenes/Demo Scene (Game).unity
+    guid: ffb554a9f53a4e04d894c8a8ff63189f
+  m_configObjects: {}
