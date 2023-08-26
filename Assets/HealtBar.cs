@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealtBar : MonoBehaviour
 {
     Image healtBar;
-    public float maxHealt = 100;
+    public float maxHealt = 1;
     public float HP;
 
     private void Start()

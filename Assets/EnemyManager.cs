@@ -3,11 +3,12 @@ using UnityEngine.AI;
 
 public class EnemyManager : MonoBehaviour
 {
-    public int health = 15;
+    private EnemyController health;
     public bool isHit = false;
     public GameObject player;
     public GameObject projectilePrefab; // Префаб снаряда
     public Transform firePoint; // Место, откуда будет выпускаться снаряд
+    public EnemyController enemyController;
 
     private Animator anim;
     private NavMeshAgent agent;
@@ -22,19 +23,11 @@ public class EnemyManager : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void TakeDamage()
-    {
-        health--;
-
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+ 
 
     void Update()
     {
-        if (player != null)
+        if (player != null && enemyController != null && enemyController.IsAlive())
         {
             Vector3 directionToPlayer = player.transform.position - transform.position;
             directionToPlayer.Normalize();
@@ -42,7 +35,10 @@ public class EnemyManager : MonoBehaviour
             if (isNavMeshActive)
             {
                 agent.enabled = true;
+               
                 agent.SetDestination(player.transform.position);
+
+                anim.SetBool("IsWalking", true); // Включаем анимацию ходьбы
             }
             else
             {
@@ -51,13 +47,8 @@ public class EnemyManager : MonoBehaviour
 
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-            if (distanceToPlayer > 100f)
-            {
-                agent.enabled = true;
-                anim.SetBool("IsWalking", true);
-                anim.SetBool("IsShooting", false);
-            }
-            else if (distanceToPlayer <= 100f)
+         
+            if (distanceToPlayer <= 100f)
             {
                 agent.enabled = false;
                 anim.SetBool("IsWalking", false);
@@ -70,12 +61,9 @@ public class EnemyManager : MonoBehaviour
                     nextFireTime = Time.time + fireCooldown;
                 }
             }
-            else
-            {
-                anim.SetBool("IsShooting", false);
-                anim.SetBool("IsWalking", false);
 
-            }
+          
+            
         }
     }
 
@@ -92,7 +80,8 @@ public class EnemyManager : MonoBehaviour
         float projectileSpeed = 10f;
         rb.velocity = directionToPlayer * projectileSpeed;
         rb.rotation = Quaternion.LookRotation(directionToPlayer);
-        float projectileLifetime = 3f;
+        float projectileLifetime = 2f;
         Destroy(projectile, projectileLifetime);
     }
+   
 }

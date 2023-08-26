@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     public float rotationSpeed = 10f;
 
 
-    public int maxHealth = 5; // Максимальное здоровье врага
+    public int maxHealth = 1; // Максимальное здоровье врага
     private int health; // Текущее здоровье врага
     private int killedPlayer = 0;
 

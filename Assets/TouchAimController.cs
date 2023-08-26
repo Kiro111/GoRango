@@ -27,7 +27,7 @@ public class TouchAimController : MonoBehaviour
     private Transform targetTransform;
     private SpriteRenderer targetSpriteRenderer;
     private bool isInputActive;
-    private Vector2 initialInputPosition;
+
     private bool isPlayingRightAnimation;
     private bool isPlayingLeftAnimation;
     private bool canShoot = true;
@@ -38,12 +38,11 @@ public class TouchAimController : MonoBehaviour
     public Transform aim;
     private bool isAimingAtEnemy;
 
-    private bool isAddingEnemies = true;
 
     private int score = 0;
     [SerializeField] private TextMeshProUGUI killedEnemiesText;
     public float baseEnemySpeed = 5f;
-
+  
     void Start()
     {
         
@@ -54,13 +53,11 @@ public class TouchAimController : MonoBehaviour
         targetSpriteRenderer.color = defaultAimColor;
         isInputActive = false;
 
-        if (aimLineRenderer != null)
-        {
-            aimLineRenderer.enabled = false;
-        }
-        // Удалите создание врага из корутины и добавьте его сразу здесь
-       
-        //StartCoroutine(AddEnemiesCoroutine());
+
+
+        
+
+
         // Найти всех врагов на сцене и добавить их в список
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
         enemies.AddRange(enemyObjects);
@@ -94,6 +91,13 @@ public class TouchAimController : MonoBehaviour
                 //float enemySpeed = Mathf.Lerp(baseEnemySpeed, baseEnemySpeed * 10f, Time.timeSinceLevelLoad / 10f); // Увеличение скорости врагов с течением времени
                 //enemyTransform.position += directionToPlayer * enemySpeed * Time.deltaTime;
             }
+        }
+
+        Animator playerAnimator = player.GetComponent<Animator>();
+
+        if (enemyTransforms==null)
+        {
+            playerAnimator.SetBool("IsWalking", true);
         }
 
 
@@ -149,28 +153,27 @@ public class TouchAimController : MonoBehaviour
             bool isMovingRight = anchoredPosition.x > 0;
             bool isMovingLeft = anchoredPosition.x < 0;
 
-            Animator playerAnimator = player.GetComponent<Animator>();
             if (playerAnimator != null)
             {
-                if (isPlayingLeftAnimation && anchoredPosition.x > 0f)
+                if (isPlayingLeftAnimation && anchoredPosition.x > -18f)
                 {
                     playerAnimator.SetBool("Left", false);
                     isPlayingLeftAnimation = false;
                 }
 
-                if (isPlayingRightAnimation && anchoredPosition.x < 0f)
+                if (isPlayingRightAnimation && anchoredPosition.x < -18f)
                 {
                     playerAnimator.SetBool("Right", false);
                     isPlayingRightAnimation = false;
                 }
 
-                if (!isPlayingRightAnimation && anchoredPosition.x > 0f)
+                if (!isPlayingRightAnimation && anchoredPosition.x > -18f)
                 {
                     playerAnimator.SetBool("Right", true);
                     isPlayingRightAnimation = true;
                 }
 
-                if (!isPlayingLeftAnimation && anchoredPosition.x < 0f)
+                if (!isPlayingLeftAnimation && anchoredPosition.x <-18f)
                 {
                     playerAnimator.SetBool("Left", true);
                     isPlayingLeftAnimation = true;
@@ -179,7 +182,7 @@ public class TouchAimController : MonoBehaviour
         }
         else
         {
-            Animator playerAnimator = player.GetComponent<Animator>();
+           
             if (playerAnimator != null)
             {
                 playerAnimator.SetBool("Right", false);
